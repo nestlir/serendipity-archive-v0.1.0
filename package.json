@@ -1,0 +1,12 @@
+{
+  "name": "serendipity-archive",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "python -m http.server 4173",
+    "build": "python3 -c \"print('Static build: no compilation required')\""
+  },
+  "devDependencies": {
+    "vite": "^8.2.2"
+  }
+}
