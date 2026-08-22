@@ -1,6 +1,5 @@
-/* Local image library. Always include the GitHub Pages base so images work on every route. */
-const BASE = location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '';
-const local = (name) => `${BASE}/images/${name}.webp`;
+/* Local image library. Resolve from this module so GitHub Pages and every route use the same real asset path. */
+const local = (name) => new URL(`../images/${name}.webp`, import.meta.url).href;
 
 export const imageMap = {
   'KŌDŌ': local('kodo'),
