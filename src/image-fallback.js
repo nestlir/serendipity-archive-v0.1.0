@@ -1,24 +1,3 @@
-const BASE = window.__SERENDIPITY_BASE__ || '/serendipity-archive-v0.1.0';
-
-const REMOTE_FILES = {
-  kodo:'Japanese - Incense Burner ("Koro") - Walters 49466.jpg',
-  'kodo-kirin':'Japanese - Incense Burner ("Koro") in the Form of the Kirin - Walters 491731 - Three Quarter.jpg',
-  'kodo-tokonoma':'JapaneseIncenseBurner KouroOnTokonoma.jpg',
-  'tea-bowl':'Japanese - Tea Bowl - Walters 49233.jpg',
-  kyusu:'JapaneseTeapot.jpg',
-  'kyusu-ueno':'Kyusu by i yudai in Ueno, Tokyo.jpg',
-  'kyusu-household':'Household-kyusu-feb5-2015.jpg',
-  'fushimi-inari':'20181110 Fushimi Inari Torii 1.jpg',
-  sagano:'20181110 Fushimi Inari Torii 11.jpg',
-  kyoto:'Kyoto Fushimi Inari-taisha Eingangs-Torii.jpg',
-  suwon:'Suwon, Hwaseong Fortress.jpg',
-  washi:'Shiroishi washi letter paper.jpg',
-  kintsugi:'Kintsugi.jpg',
-  'seal-script':'Xiao Zhuan.jpg'
-};
-
-const remoteUrl = (name) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(REMOTE_FILES[name])}?width=1400`;
-
 function keyFromImage(img) {
   const source = img.currentSrc || img.src || '';
   const match = source.match(/\/images\/([^/?#]+)\.webp(?:[?#]|$)/i);
@@ -26,11 +5,10 @@ function keyFromImage(img) {
 }
 
 function fallback(img) {
-  if (!img || img.dataset.imageFallback === 'remote') return;
-  const key = keyFromImage(img);
-  if (!key || !REMOTE_FILES[key]) return;
-  img.dataset.imageFallback = 'remote';
-  img.src = remoteUrl(key);
+  if (!img || img.dataset.imageFallback === 'local') return;
+  img.dataset.imageFallback = 'local';
+  const label = (img.alt || keyFromImage(img) || 'SERENDIPITY').replace(/[<>&]/g, '').slice(0, 42);
+  img.src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700"><rect width="900" height="700" fill="%23d9d1c2"/><path d="M90 560 C210 390 270 480 380 300 S610 210 810 90" fill="none" stroke="%23a83a2c" stroke-width="2" opacity=".28"/><text x="60" y="625" fill="%23172235" font-family="serif" font-size="28" letter-spacing="5">${encodeURIComponent(label)}</text></svg>`;
 }
 
 function bind(root = document) {
