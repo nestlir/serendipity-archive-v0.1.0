@@ -1,4 +1,6 @@
-export const image = '/images/reference-hero.png';
+import { imageMap } from './image-map.js';
+
+export const image = imageMap['KYOTO'];
 export const categories = ['ALL','OBJECTS','PLACES','CRAFT','ART','PEOPLE','IDEAS'];
 export const entities = {
   OBJECTS:[
