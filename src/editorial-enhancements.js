@@ -21,6 +21,7 @@ const REMOTE_FILES = {
   'seal-script':'Xiao Zhuan.jpg'
 };
 const remoteUrl = (name) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(REMOTE_FILES[name])}?width=1200`;
+const dateLabel = (date = new Date()) => `${date.toLocaleDateString('en-GB', { day:'2-digit' })} ${date.toLocaleDateString('en-GB', { month:'long' }).toUpperCase()} ${date.getFullYear()}`;
 
 function activeNavigation() {
   const current = path();
@@ -65,7 +66,7 @@ function journalDaily() {
   const items = plans.map((item, index) => `<div class="daily-plan-item ${index === todayIndex ? 'today' : ''}"><span>${item[0]}</span><div><strong>${item[1]}</strong><small>${item[2]}</small></div></div>`).join('');
   const section = document.createElement('section');
   section.className = 'daily-editorial';
-  section.innerHTML = `<div class="daily-editorial-intro"><span class="eyebrow">TODAY / ${day} ${month} 2026 · ${weekday}</span><h2>A NOTE,<br><em>EVERY DAY.</em></h2><p>Serendipity changes a little every day. One observation enters the Journal, then becomes another thread through the archive.</p><a class="daily-date" href="/journal/why-japanese-objects-feel-different/">TODAY'S NOTE <span>→</span></a></div><div class="daily-plan"><div class="daily-plan-head"><span class="eyebrow">THE WEEK / EDITORIAL RHYTHM</span></div>${items}</div>`;
+  section.innerHTML = `<div class="daily-editorial-intro"><span class="eyebrow">TODAY / ${day} ${month} ${now.getFullYear()} · ${weekday}</span><h2>A NOTE,<br><em>EVERY DAY.</em></h2><p><strong>Today's note:</strong> look once for the whole object, then again for the edge, the material and the hand that made it. Small details often become the strongest memory.</p><a class="daily-date" href="/journal/the-art-of-noticing/">READ TODAY'S NOTE <span>→</span></a></div><div class="daily-plan"><div class="daily-plan-head"><span class="eyebrow">THE WEEK / EDITORIAL RHYTHM</span></div>${items}</div>`;
   list.parentNode.insertBefore(section, list);
   const head = document.querySelector('.page-head');
   head?.classList.add('journal-head');
@@ -83,7 +84,7 @@ function homeDaily() {
   if (!archive || !featured || document.querySelector('.daily-home')) return;
   const section = document.createElement('section');
   section.className = 'daily-home';
-  section.innerHTML = `<div><span class="eyebrow">TODAY IN THE ARCHIVE / 22 AUGUST 2026</span><h2>ONE MORE<br><em>THING TO NOTICE.</em></h2></div><div><p>Every day, one new detail joins the collection: an object, a place, a craft, a person or an idea. Start here, then follow the trail.</p><a class="text-link" href="/journal/">OPEN TODAY'S JOURNAL <span>→</span></a></div>`;
+  section.innerHTML = `<div><span class="eyebrow">TODAY IN THE ARCHIVE / ${dateLabel()}</span><h2>ONE MORE<br><em>THING TO NOTICE.</em></h2></div><div><p>Every day, one new detail joins the collection: an object, a place, a craft, a person or an idea. Start here, then follow the trail.</p><a class="text-link" href="/journal/">OPEN TODAY'S JOURNAL <span>→</span></a></div>`;
   featured.parentNode.insertBefore(section, featured);
 }
 
