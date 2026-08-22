@@ -21,13 +21,13 @@ document.addEventListener('click', (event) => {
   const link = event.target.closest?.('a[href]'); if (!link) return;
   const href = link.getAttribute('href');
   if (!href || !href.startsWith('/') || href.startsWith('//') || href.startsWith(BASE)) return;
-  event.preventDefault(); location.href = prefix(href);
+  link.setAttribute('href', prefix(href));
 });
-document.addEventListener('DOMContentLoaded', () => {
+const boot = () => {
   rewrite();
-  const observer = new MutationObserver(() => rewrite());
-  observer.observe(document.body, { childList: true, subtree: true });
-});
+  if (document.body) new MutationObserver(() => rewrite()).observe(document.body, { childList: true, subtree: true });
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true }); else boot();
 
 const currentSection = () => {
   const path = location.pathname.replace(BASE, '').split('/').filter(Boolean)[0] || 'home';
