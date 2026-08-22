@@ -1,6 +1,6 @@
-/* Local image library. Keep image URLs inside the deployed /src tree so every GitHub Pages route resolves them identically. */
-const BASE = '/serendipity-archive-v0.1.0';
-const local = (name) => `${BASE}/src/images/${name}.webp`;
+/* Local image library. Images live in public/images so Vite serves them locally
+   and the GitHub Pages runtime prefixes the project path in production. */
+const local = (name) => `/images/${name}.webp`;
 
 export const imageMap = {
   'KŌDŌ': local('kodo'),
