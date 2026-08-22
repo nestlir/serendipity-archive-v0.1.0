@@ -12,7 +12,7 @@ export const imageMap = {
   'SUWON': image('Suwon_Hwaseong_Fortress.jpg'),
   'WASHI': image('Shiroishi_washi_letter_paper.jpg'),
   'KINTSUGI': image('Kintsugi.jpg'),
-  'SEAL SCRIPT': image('Seal_script_calligraphy.jpg')
+  'SEAL SCRIPT': image('Xiao Zhuan.jpg')
 };
 
 export const gallerySets = {
