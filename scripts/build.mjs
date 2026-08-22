@@ -25,4 +25,12 @@ fs.cpSync(path.join(root, '404.html'), path.join(site, '404.html'));
 fs.cpSync(path.join(root, 'src'), path.join(site, 'src'), { recursive: true });
 fs.cpSync(path.join(root, 'public'), site, { recursive: true });
 
+// Keep a second copy of the optimized image library inside /src/images.
+// image-map.js references this exact path so image requests cannot depend on
+// the current page URL or on runtime link rewriting.
+const deployedImages = path.join(site, 'src', 'images');
+fs.rmSync(deployedImages, { recursive: true, force: true });
+fs.cpSync(path.join(root, 'public', 'images'), deployedImages, { recursive: true });
+
 console.log(`Built static site: ${site}`);
+console.log(`Deployed image library: ${deployedImages}`);
