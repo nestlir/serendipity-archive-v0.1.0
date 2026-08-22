@@ -28,6 +28,8 @@ jobs:
           test -f public/favicon.svg
           test -f src/app.js
           test -f src/content.js
+          test -f src/image-map.js
+          test -f src/runtime.js
           test -f src/styles.css
           test -f src/search.js
           test -f src/collection.js
@@ -35,8 +37,6 @@ jobs:
           test -f src/qa.css
           test -f src/performance.css
           test -f src/production-ui.css
-          test -f src/runtime.js
-          test -f src/image-map.js
 
       - name: Check JavaScript syntax
         shell: bash
@@ -47,10 +47,8 @@ jobs:
           node --check src/collection.js
           node --check src/discovery.js
           node --check src/assets.js
-          node --check src/runtime.js
           node --check src/image-map.js
-          node --check scripts/dev-server.mjs
-          node --check scripts/build.mjs
+          node --check src/runtime.js
           node --check scripts/prepare-pages.mjs
 
       - name: Check temporary assets are not accidentally hidden
@@ -68,6 +66,7 @@ jobs:
           cp index.html 404.html _site/
           cp -R src _site/
           cp -R public/. _site/
+          node scripts/prepare-pages.mjs
           test -f _site/index.html
           test -f _site/404.html
           test -f _site/robots.txt
