@@ -1,6 +1,6 @@
-const BASE = '/serendipity-archive-v0.1.0';
+const BASE = location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '';
 window.__SERENDIPITY_BASE__ = BASE;
-const prefix = (value) => (!value || !value.startsWith('/') || value.startsWith('//') || value.startsWith(BASE) ? value : BASE + value);
+const prefix = (value) => (!value || !value.startsWith('/') || value.startsWith('//') || !BASE || value.startsWith(BASE) ? value : BASE + value);
 const rewrite = (root = document) => {
   root.querySelectorAll?.('[href^="/"],[src^="/"],[action^="/"]').forEach((el) => ['href','src','action'].forEach((attr) => {
     const value = el.getAttribute(attr); if (value) el.setAttribute(attr, prefix(value));
@@ -12,7 +12,7 @@ if (descriptor?.set) {
     configurable: true,
     get: descriptor.get,
     set(value) {
-      const html = String(value).replaceAll('href="/', `href="${BASE}/`).replaceAll('src="/', `src="${BASE}/`).replaceAll('action="/', `action="${BASE}/`);
+      const html = BASE ? String(value).replaceAll('href="/', `href="${BASE}/`).replaceAll('src="/', `src="${BASE}/`).replaceAll('action="/', `action="${BASE}/`) : String(value);
       descriptor.set.call(this, html);
     }
   });
@@ -20,7 +20,7 @@ if (descriptor?.set) {
 document.addEventListener('click', (event) => {
   const link = event.target.closest?.('a[href]'); if (!link) return;
   const href = link.getAttribute('href');
-  if (!href || !href.startsWith('/') || href.startsWith('//') || href.startsWith(BASE)) return;
+  if (!href || !href.startsWith('/') || href.startsWith('//') || !BASE || href.startsWith(BASE)) return;
   link.setAttribute('href', prefix(href));
 });
 const boot = () => {
