@@ -28,8 +28,29 @@ export const entities = {
 export const entries = Object.values(entities).flat();
 
 export const stories = [
-  { slug:'why-japanese-objects-feel-different', type:'ESSAY', title:'Why Japanese objects feel different', excerpt:'An essay about quiet intention, imperfect materials and the beauty of things made by human hands.', date:'08.08.2026', readTime:12, tags:['Japan','craft','objects'], related:['tea-bowl','washi','kintsugi'], image },
-  { slug:'the-art-of-noticing', type:'FIELD NOTE', title:'The art of noticing', excerpt:'A short note about why the smallest material details often carry the strongest memory.', date:'02.08.2026', readTime:4, tags:['observation','material'], related:['kodo','washi'], image },
+  {
+    slug:'why-japanese-objects-feel-different', type:'ESSAY', title:'Why Japanese objects feel different', excerpt:'An essay about quiet intention, imperfect materials and the beauty of things made by human hands.', date:'08.08.2026', readTime:12,
+    tags:['Japan','craft','objects'], related:['tea-bowl','washi','kintsugi'], image,
+    dek:'Why ordinary objects can carry extraordinary attention.',
+    body:[
+      'There are objects that ask to be looked at, and objects that teach you how to look. Japanese craft often becomes memorable through the second category.',
+      'A tea bowl, a sheet of paper, a wooden tray or a small incense vessel does not need visual perfection to feel resolved. Surface, proportion and the evidence of making carry the story.',
+      'The interesting detail is usually one you notice after the first impression: a thumb mark, a repair, a slight asymmetry, the way an edge catches light.'
+    ],
+    pullQuote:'The most interesting detail is often the one you notice second.',
+    sources:['Prototype editorial draft — replace with verified sources before publication.']
+  },
+  {
+    slug:'the-art-of-noticing', type:'FIELD NOTE', title:'The art of noticing', excerpt:'A short note about why the smallest material details often carry the strongest memory.', date:'02.08.2026', readTime:4,
+    tags:['observation','material'], related:['kodo','washi'], image,
+    dek:'A small field note on slowing down enough to see.',
+    body:[
+      'Noticing starts with slowing down enough to see a material change.',
+      'The edge of a paper screen, the shadow under a roof, the rhythm of a repeated mark: small details often tell us where a place came from and what people cared to preserve.'
+    ],
+    pullQuote:'Look again after the first impression.',
+    sources:['Prototype editorial draft — replace with verified sources before publication.']
+  }
 ];
 
 export const getEntry = (id) => entries.find((entry) => entry.id === id);
