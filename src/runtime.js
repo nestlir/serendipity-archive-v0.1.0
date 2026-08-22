@@ -29,10 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
   observer.observe(document.body, { childList: true, subtree: true });
 });
 
+const currentSection = () => {
+  const path = location.pathname.replace(BASE, '').split('/').filter(Boolean)[0] || 'home';
+  return path.toLowerCase();
+};
 const bootQuickNav = () => {
   if (document.querySelector('.quick-nav')) return;
   const nav = document.createElement('aside'); nav.className = 'quick-nav';
-  nav.innerHTML = `<button class="quick-nav-toggle" type="button" aria-expanded="false" aria-controls="quick-nav-panel"><span></span><span></span><span></span><b>MENU</b></button><div class="quick-nav-panel" id="quick-nav-panel" aria-hidden="true"><a href="/">HOME</a><a href="/archive/">ARCHIVE</a><a href="/journal/">JOURNAL</a><a href="/discover/">DISCOVER</a><a href="/collection/">COLLECTION</a><a href="/search/">SEARCH</a><a href="/about/">ABOUT</a></div>`;
+  const section = currentSection();
+  const links = [['/','HOME','home'],['/archive/','ARCHIVE','archive'],['/journal/','JOURNAL','journal'],['/discover/','DISCOVER','discover'],['/collection/','COLLECTION','collection'],['/search/','SEARCH','search'],['/about/','ABOUT','about']];
+  nav.innerHTML = `<button class="quick-nav-toggle" type="button" aria-expanded="false" aria-controls="quick-nav-panel"><span></span><span></span><span></span><b>MENU</b></button><div class="quick-nav-panel" id="quick-nav-panel" aria-hidden="true">${links.map(([href,label,key]) => `<a class="${section === key ? 'active' : ''}" aria-current="${section === key ? 'page' : 'false'}" href="${href}">${label}</a>`).join('')}</div>`;
   document.body.append(nav);
   const button = nav.querySelector('button'); const panel = nav.querySelector('.quick-nav-panel');
   button.addEventListener('click', () => { const open = nav.classList.toggle('is-open'); button.setAttribute('aria-expanded', String(open)); panel.setAttribute('aria-hidden', String(!open)); });
