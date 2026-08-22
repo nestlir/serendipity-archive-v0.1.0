@@ -1,0 +1,31 @@
+name: Build local image library
+
+on:
+  push:
+    paths-ignore:
+      - 'public/images/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install image tools
+        run: python3 -m pip install --disable-pip-version-check pillow requests
+
+      - name: Download and optimize missing images
+        run: python3 scripts/build-image-library.py
+
+      - name: Commit local images
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/images
+          git diff --cached --quiet || git commit -m 'build: update local optimized images'
+          git push
