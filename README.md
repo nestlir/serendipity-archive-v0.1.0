@@ -14,6 +14,8 @@ A contemporary digital archive of things worth noticing.
 - Responsive mobile layout
 - Design tokens and typography based on the approved 1 + 3 direction
 - Entity, journal, search, discovery and collection routes
+- Quiet fixed quick-navigation available across pages
+- Living detail galleries with curated image references
 
 ## Local development
 
@@ -30,13 +32,16 @@ Open `http://localhost:4173/`.
 The local server has SPA fallback, so these routes work directly as well:
 
 - `/archive/`
+- `/archive/?category=objects`
 - `/journal/`
 - `/journal/why-japanese-objects-feel-different/`
 - `/discover/`
 - `/search/`
 - `/collection/`
 - `/about/`
-- `/objects/kodo/`
+- `/objects/` → archive category shortcut
+- `/objects/kodo/` → entity detail
+- `/places/`, `/craft/`, `/art/`, `/people/`, `/ideas/`
 
 Run the source checks with:
 
@@ -58,11 +63,11 @@ The production site is a GitHub Pages **project site**:
 
 GitHub Pages is configured to publish from **GitHub Actions**.
 
-`.github/workflows/deploy-pages.yml` builds the static artifact and runs `scripts/prepare-pages.mjs` before deployment. That step adds the repository base path only to the deployment copy, so the source remains usable from the local server.
+`.github/workflows/deploy-pages.yml` builds the static artifact and runs `scripts/prepare-pages.mjs` before deployment. Route normalization is applied only to the deployment copy, so the source remains clean and usable from the local server.
 
 The deployment also uses `404.html` as a SPA fallback, allowing direct visits to nested routes on GitHub Pages.
 
-## Content model
+## Content and image model
 
 The first version keeps content local so the visual/product layer can be iterated quickly. A production content layer should eventually move entries into a CMS/database with fields for:
 
@@ -80,9 +85,7 @@ The first version keeps content local so the visual/product layer can be iterate
 - related entries
 - tags
 
-## Important asset note
-
-`public/images/reference-hero.png` is the user-provided reference artwork used only as a temporary prototype asset. Before publishing the site publicly, replace it with artwork/photography for which the project has confirmed usage rights.
+`src/image-map.js` currently contains curated Wikimedia Commons references for prototype presentation. They remain **review** assets and must be downloaded/optimized and their exact license/attribution recorded before production publication. The current user-provided reference artwork remains temporary.
 
 ## Production roadmap
 
