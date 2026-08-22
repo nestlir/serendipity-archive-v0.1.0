@@ -5,6 +5,7 @@ const root = process.cwd();
 const site = path.join(root, '_site');
 const required = [
   'index.html', '404.html', 'src/app.js', 'src/search.js', 'src/content.js',
+  'src/runtime.js', 'src/image-map.js', 'src/production-ui.css',
   'public/robots.txt', 'public/sitemap.xml', 'public/site.webmanifest', 'public/favicon.svg'
 ];
 
@@ -12,7 +13,7 @@ for (const file of required) {
   if (!fs.existsSync(path.join(root, file))) throw new Error(`Missing required file: ${file}`);
 }
 
-for (const file of ['src/app.js', 'src/search.js', 'src/collection.js', 'src/discovery.js', 'src/assets.js']) {
+for (const file of ['src/app.js', 'src/search.js', 'src/collection.js', 'src/discovery.js', 'src/assets.js', 'src/runtime.js', 'src/image-map.js']) {
   const source = fs.readFileSync(path.join(root, file), 'utf8');
   if (!source.trim()) throw new Error(`Empty source file: ${file}`);
 }
