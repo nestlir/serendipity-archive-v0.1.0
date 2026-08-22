@@ -2,12 +2,11 @@ import { imageMap, gallerySets } from './image-map.js';
 
 const BASE = location.pathname.startsWith('/serendipity-archive-v0.1.0') ? '/serendipity-archive-v0.1.0' : '';
 window.__SERENDIPITY_BASE__ = BASE;
+const prefix = (value) => (!BASE || !value || value.startsWith(BASE) || !value.startsWith('/') ? value : BASE + value);
 const normalizedPath = () => location.pathname.replace(BASE, '').replace(/\/+$/, '') || '/';
 const categoryRoutes = new Set(['objects','places','craft','art','people','ideas']);
-if (categoryRoutes.has(normalizedPath().slice(1))) {
-  location.replace(prefix(`/archive/?category=${normalizedPath().slice(1)}`));
-}
-const prefix = (value) => (!BASE || !value || value.startsWith(BASE) || !value.startsWith('/') ? value : BASE + value);
+if (categoryRoutes.has(normalizedPath().slice(1))) location.replace(prefix(`/archive/?category=${normalizedPath().slice(1)}`));
+
 const visual = (html) => html.replace(/(<img\b[^>]*\bsrc=")[^"]*("[^>]*\balt=")([^"]+)("[^>]*>)/gi, (match, before, mid, alt, after) => imageMap[alt] ? `${before}${imageMap[alt]}${mid}${alt}${after}` : match);
 const rewrite = (root = document) => {
   if (!BASE) return;
