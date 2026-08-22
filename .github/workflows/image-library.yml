@@ -4,6 +4,8 @@ on:
   push:
     paths-ignore:
       - 'public/images/**'
+  schedule:
+    - cron: '20 3 * * *'
   workflow_dispatch:
 
 permissions:
