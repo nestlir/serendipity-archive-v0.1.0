@@ -1,5 +1,5 @@
-/* Local image library. The path includes the GitHub Pages base so images work on every route. */
-const BASE = window.__SERENDIPITY_BASE__ || (location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '');
+/* Local image library. Always include the GitHub Pages base so images work on every route. */
+const BASE = location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '';
 const local = (name) => `${BASE}/images/${name}.webp`;
 
 export const imageMap = {
