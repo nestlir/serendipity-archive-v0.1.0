@@ -5,11 +5,30 @@ const dateLabel = () => today.toLocaleDateString('en-GB', {day:'2-digit', month:
 function homeToday() {
   const archive = document.querySelector('.hero + .archive');
   const featured = document.querySelector('.featured');
-  if (!archive || !featured || document.querySelector('.today-archive')) return;
+  if (!archive || !featured) return;
+  const existing = document.querySelector('.daily-home');
+  if (existing) {
+    const eyebrow = existing.querySelector('.eyebrow');
+    if (eyebrow) eyebrow.textContent = `TODAY IN THE ARCHIVE / ${dateLabel()}`;
+    return;
+  }
   const section = document.createElement('section');
   section.className = 'today-archive daily-home';
   section.innerHTML = `<div><span class="eyebrow">TODAY IN THE ARCHIVE / ${dateLabel()}</span><h2>ONE MORE<br><em>THING TO NOTICE.</em></h2></div><div><p>A fresh observation joins the archive every day. Start with today's note, then follow the trail into objects, places, craft and ideas.</p><a class="text-link" href="${BASE}/journal/">OPEN TODAY'S JOURNAL <span>→</span></a></div>`;
   featured.parentNode.insertBefore(section, featured);
+}
+
+function journalToday() {
+  const section = document.querySelector('.daily-editorial');
+  if (!section) return;
+  const intro = section.querySelector('.daily-editorial-intro');
+  const plans = [...section.querySelectorAll('.daily-plan-item')];
+  const index = today.getDay() === 0 ? 6 : today.getDay() - 1;
+  plans.forEach((item, i) => item.classList.toggle('today', i === index));
+  const eyebrow = intro?.querySelector('.eyebrow');
+  if (eyebrow) eyebrow.textContent = `TODAY / ${dateLabel()} · ${today.toLocaleDateString('en-GB',{weekday:'short'}).toUpperCase()}`;
+  const note = intro?.querySelector('p');
+  if (note) note.innerHTML = '<strong>Today\'s note:</strong> look once for the whole object, then again for the edge, the material and the hand that made it. Small details often become the strongest memory.';
 }
 
 function aboutPlate() {
@@ -42,16 +61,11 @@ function optimizeImages() {
   const images = [...document.images];
   images.forEach((image, index) => {
     image.decoding = 'async';
-    const critical = image.closest('.hero-art,.detail-image,.story-image') || (index === 0 && location.pathname === BASE + '/');
-    if (critical) {
-      image.loading = 'eager';
-      image.setAttribute('fetchpriority','high');
-    } else {
-      image.loading = 'lazy';
-      image.removeAttribute('fetchpriority');
-    }
+    const critical = image.closest('.hero-art,.detail-image,.story-image') || (index === 0 && (location.pathname === BASE || location.pathname === `${BASE}/`));
+    if (critical) { image.loading = 'eager'; image.setAttribute('fetchpriority','high'); }
+    else { image.loading = 'lazy'; image.removeAttribute('fetchpriority'); }
   });
-  if (location.pathname === BASE + '/' && !document.querySelector('link[data-serendipity-preload]')) {
+  if ((location.pathname === BASE || location.pathname === `${BASE}/`) && !document.querySelector('link[data-serendipity-preload]')) {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
@@ -61,11 +75,5 @@ function optimizeImages() {
   }
 }
 
-function init() {
-  homeToday();
-  aboutPlate();
-  addEditorialDetails();
-  optimizeImages();
-}
-
+function init() { homeToday(); journalToday(); aboutPlate(); addEditorialDetails(); optimizeImages(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
