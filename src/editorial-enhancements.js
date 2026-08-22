@@ -1,32 +1,11 @@
 const BASE = window.__SERENDIPITY_BASE__ || (location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '');
-const path = () => {
-  const value = location.pathname.replace(/\/+$/, '') || '/';
-  return value.startsWith(BASE) ? (value.slice(BASE.length) || '/') : value;
-};
-
-const REMOTE_FILES = {
-  kodo:'Japanese - Incense Burner ("Koro") - Walters 49466.jpg',
-  'kodo-kirin':'Japanese - Incense Burner ("Koro") in the Form of the Kirin - Walters 491731 - Three Quarter.jpg',
-  'kodo-tokonoma':'JapaneseIncenseBurner KouroOnTokonoma.jpg',
-  'tea-bowl':'Japanese - Tea Bowl - Walters 49233.jpg',
-  kyusu:'JapaneseTeapot.jpg',
-  'kyusu-ueno':'Kyusu by i yudai in Ueno, Tokyo.jpg',
-  'kyusu-household':'Household-kyusu-feb5-2015.jpg',
-  'fushimi-inari':'20181110 Fushimi Inari Torii 1.jpg',
-  sagano:'20181110 Fushimi Inari Torii 11.jpg',
-  kyoto:'Kyoto Fushimi Inari-taisha Eingangs-Torii.jpg',
-  suwon:'Suwon, Hwaseong Fortress.jpg',
-  washi:'Shiroishi washi letter paper.jpg',
-  kintsugi:'Kintsugi.jpg',
-  'seal-script':'Xiao Zhuan.jpg'
-};
-const remoteUrl = (name) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(REMOTE_FILES[name])}?width=1200`;
+const path = () => { const value = location.pathname.replace(/\/+$/, '') || '/'; return value.startsWith(BASE) ? (value.slice(BASE.length) || '/') : value; };
 const dateLabel = (date = new Date()) => `${date.toLocaleDateString('en-GB', { day:'2-digit' })} ${date.toLocaleDateString('en-GB', { month:'long' }).toUpperCase()} ${date.getFullYear()}`;
 
 function activeNavigation() {
   const current = path();
   const section = current.split('/').filter(Boolean)[0] || 'home';
-  const aliases = { objects:'archive', places:'archive', craft:'archive', art:'archive', people:'archive', ideas:'archive', search:'archive', journal:'journal', collection:'collection', about:'about' };
+  const aliases = { objects:'archive', places:'archive', craft:'archive', art:'archive', people:'archive', ideas:'archive', search:'search', journal:'journal', collection:'collection', about:'about' };
   const active = aliases[section] || section;
   document.querySelectorAll('.nav a, .quick-nav-panel a').forEach((link) => {
     const href = link.getAttribute('href') || '';
@@ -53,39 +32,13 @@ function journalDaily() {
   const day = now.toLocaleDateString('en-GB', { day:'2-digit' });
   const month = now.toLocaleDateString('en-GB', { month:'long' }).toUpperCase();
   const weekday = now.toLocaleDateString('en-GB', { weekday:'short' }).toUpperCase();
-  const plans = [
-    ['MON','OBJECT','A material detail worth keeping.'],
-    ['TUE','PLACE','A street, room or landscape.'],
-    ['WED','CRAFT','A process carried by hands.'],
-    ['THU','PEOPLE','Someone who changed a way of making.'],
-    ['FRI','IDEA','A thought worth following further.'],
-    ['SAT','LONG READ','One slower story for the weekend.'],
-    ['SUN','FIELD NOTE','A small observation from the week.']
-  ];
+  const plans = [['MON','OBJECT','A material detail worth keeping.'],['TUE','PLACE','A street, room or landscape.'],['WED','CRAFT','A process carried by hands.'],['THU','PEOPLE','Someone who changed a way of making.'],['FRI','IDEA','A thought worth following further.'],['SAT','LONG READ','One slower story for the weekend.'],['SUN','FIELD NOTE','A small observation from the week.']];
   const todayIndex = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const items = plans.map((item, index) => `<div class="daily-plan-item ${index === todayIndex ? 'today' : ''}"><span>${item[0]}</span><div><strong>${item[1]}</strong><small>${item[2]}</small></div></div>`).join('');
   const section = document.createElement('section');
   section.className = 'daily-editorial';
-  section.innerHTML = `<div class="daily-editorial-intro"><span class="eyebrow">TODAY / ${day} ${month} ${now.getFullYear()} · ${weekday}</span><h2>A NOTE,<br><em>EVERY DAY.</em></h2><p><strong>Today's note:</strong> look once for the whole object, then again for the edge, the material and the hand that made it. Small details often become the strongest memory.</p><a class="daily-date" href="/journal/the-art-of-noticing/">READ TODAY'S NOTE <span>→</span></a></div><div class="daily-plan"><div class="daily-plan-head"><span class="eyebrow">THE WEEK / EDITORIAL RHYTHM</span></div>${items}</div>`;
+  section.innerHTML = `<div class="daily-editorial-intro"><span class="eyebrow">TODAY / ${day} ${month} ${now.getFullYear()} · ${weekday}</span><h2>A NOTE,<br><em>EVERY DAY.</em></h2><p><strong>Today's note:</strong> look once for the whole object, then again for the edge, the material and the hand that made it. Small details often become the strongest memory.</p><a class="daily-date" href="${BASE}/journal/the-art-of-noticing/">READ TODAY'S NOTE <span>→</span></a></div><div class="daily-plan"><div class="daily-plan-head"><span class="eyebrow">THE WEEK / EDITORIAL RHYTHM</span></div>${items}</div>`;
   list.parentNode.insertBefore(section, list);
-  const head = document.querySelector('.page-head');
-  head?.classList.add('journal-head');
-  if (head && !head.querySelector('.journal-ornament')) {
-    const ornament = document.createElement('div');
-    ornament.className = 'journal-ornament';
-    ornament.innerHTML = '<span>日</span><i></i><small>DAILY NOTES / 2026</small>';
-    head.appendChild(ornament);
-  }
-}
-
-function homeDaily() {
-  const archive = document.querySelector('.hero + .archive');
-  const featured = document.querySelector('.featured');
-  if (!archive || !featured || document.querySelector('.daily-home')) return;
-  const section = document.createElement('section');
-  section.className = 'daily-home';
-  section.innerHTML = `<div><span class="eyebrow">TODAY IN THE ARCHIVE / ${dateLabel()}</span><h2>ONE MORE<br><em>THING TO NOTICE.</em></h2></div><div><p>Every day, one new detail joins the collection: an object, a place, a craft, a person or an idea. Start here, then follow the trail.</p><a class="text-link" href="/journal/">OPEN TODAY'S JOURNAL <span>→</span></a></div>`;
-  featured.parentNode.insertBefore(section, featured);
 }
 
 function discoverComposition() {
@@ -102,19 +55,12 @@ function discoverComposition() {
 }
 
 function imageBehavior() {
-  const images = [...document.images];
-  images.forEach((img, index) => {
+  [...document.images].forEach((img, index) => {
     img.decoding = 'async';
-    const critical = img.closest('.hero-art, .detail-image, .story-image') || index < 3;
-    if (critical) img.setAttribute('fetchpriority', 'high'); else img.loading = 'lazy';
+    const critical = img.closest('.hero-art, .detail-image, .story-image') || index === 0;
+    if (critical) { img.loading = 'eager'; img.setAttribute('fetchpriority','high'); }
+    else { img.loading = 'lazy'; img.removeAttribute('fetchpriority'); }
     img.addEventListener('error', () => {
-      const match = img.currentSrc.match(/\/images\/([^/.]+)\.webp(?:$|\?)/) || img.src.match(/\/images\/([^/.]+)\.webp(?:$|\?)/);
-      const key = match?.[1];
-      if (key && REMOTE_FILES[key] && img.dataset.remoteFallback !== '1') {
-        img.dataset.remoteFallback = '1';
-        img.src = remoteUrl(key);
-        return;
-      }
       if (img.dataset.fallback) return;
       img.dataset.fallback = '1';
       const label = (img.alt || 'SERENDIPITY').replace(/[<>&]/g, '').slice(0, 42);
@@ -123,13 +69,5 @@ function imageBehavior() {
   });
 }
 
-function init() {
-  activeNavigation();
-  aboutEngraving();
-  journalDaily();
-  homeDaily();
-  discoverComposition();
-  imageBehavior();
-}
-
+function init() { activeNavigation(); aboutEngraving(); journalDaily(); discoverComposition(); imageBehavior(); }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
