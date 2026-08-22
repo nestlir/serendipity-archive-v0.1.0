@@ -1,0 +1,62 @@
+name: Serendipity static site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required production files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f index.html
+          test -f 404.html
+          test -f public/robots.txt
+          test -f public/sitemap.xml
+          test -f src/app.js
+          test -f src/content.js
+          test -f src/styles.css
+          test -f src/search.js
+          test -f src/collection.js
+          test -f src/polish.css
+          test -f src/qa.css
+          test -f src/performance.css
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check src/app.js
+          node --check src/search.js
+          node --check src/collection.js
+          node --check src/discovery.js
+          node --check src/assets.js
+
+      - name: Check temporary assets are not accidentally hidden
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -R "UNVERIFIED\|temporary" docs/PROVENANCE.md src/assets.js >/dev/null
+
+      - name: Build static artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp index.html 404.html _site/
+          cp -R src public _site/
+          test -f _site/index.html
+          test -f _site/404.html
+          test -f _site/public/robots.txt
+          test -f _site/public/sitemap.xml
