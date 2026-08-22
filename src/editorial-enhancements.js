@@ -1,9 +1,26 @@
 const BASE = window.__SERENDIPITY_BASE__ || (location.hostname.endsWith('github.io') ? '/serendipity-archive-v0.1.0' : '');
 const path = () => {
-  const value = location.pathname.replace(/\\/+$/, '') || '/';
+  const value = location.pathname.replace(/\/+$/, '') || '/';
   return value.startsWith(BASE) ? (value.slice(BASE.length) || '/') : value;
 };
-const esc = (value) => String(value).replace(/[&<>\"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '\"':'&quot;', "'":'&#39;' }[char]));
+
+const REMOTE_FILES = {
+  kodo:'Japanese - Incense Burner ("Koro") - Walters 49466.jpg',
+  'kodo-kirin':'Japanese - Incense Burner ("Koro") in the Form of the Kirin - Walters 491731 - Three Quarter.jpg',
+  'kodo-tokonoma':'JapaneseIncenseBurner KouroOnTokonoma.jpg',
+  'tea-bowl':'Japanese - Tea Bowl - Walters 49233.jpg',
+  kyusu:'JapaneseTeapot.jpg',
+  'kyusu-ueno':'Kyusu by i yudai in Ueno, Tokyo.jpg',
+  'kyusu-household':'Household-kyusu-feb5-2015.jpg',
+  'fushimi-inari':'20181110 Fushimi Inari Torii 1.jpg',
+  sagano:'20181110 Fushimi Inari Torii 11.jpg',
+  kyoto:'Kyoto Fushimi Inari-taisha Eingangs-Torii.jpg',
+  suwon:'Suwon, Hwaseong Fortress.jpg',
+  washi:'Shiroishi washi letter paper.jpg',
+  kintsugi:'Kintsugi.jpg',
+  'seal-script':'Xiao Zhuan.jpg'
+};
+const remoteUrl = (name) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(REMOTE_FILES[name])}?width=1200`;
 
 function activeNavigation() {
   const current = path();
@@ -13,7 +30,7 @@ function activeNavigation() {
   document.querySelectorAll('.nav a, .quick-nav-panel a').forEach((link) => {
     const href = link.getAttribute('href') || '';
     const target = href.replace(BASE, '').split('/').filter(Boolean)[0] || 'home';
-    const isActive = target === active || (active === 'archive' && target === 'archive');
+    const isActive = target === active;
     link.classList.toggle('active', isActive);
     if (isActive) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
   });
@@ -90,10 +107,17 @@ function imageBehavior() {
     const critical = img.closest('.hero-art, .detail-image, .story-image') || index < 3;
     if (critical) img.setAttribute('fetchpriority', 'high'); else img.loading = 'lazy';
     img.addEventListener('error', () => {
+      const match = img.currentSrc.match(/\/images\/([^/.]+)\.webp(?:$|\?)/) || img.src.match(/\/images\/([^/.]+)\.webp(?:$|\?)/);
+      const key = match?.[1];
+      if (key && REMOTE_FILES[key] && img.dataset.remoteFallback !== '1') {
+        img.dataset.remoteFallback = '1';
+        img.src = remoteUrl(key);
+        return;
+      }
       if (img.dataset.fallback) return;
       img.dataset.fallback = '1';
-      const title = encodeURIComponent(img.alt || 'SERENDIPITY');
-      img.src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700"><rect width="900" height="700" fill="%23d9d1c2"/><path d="M90 560 C210 390 270 480 380 300 S610 210 810 90" fill="none" stroke="%23a83a2c" stroke-width="2" opacity=".28"/><text x="60" y="625" fill="%23172235" font-family="serif" font-size="28" letter-spacing="5">${title}</text></svg>`;
+      const label = (img.alt || 'SERENDIPITY').replace(/[<>&]/g, '').slice(0, 42);
+      img.src = `data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700"><rect width="900" height="700" fill="%23d9d1c2"/><path d="M90 560 C210 390 270 480 380 300 S610 210 810 90" fill="none" stroke="%23a83a2c" stroke-width="2" opacity=".28"/><text x="60" y="625" fill="%23172235" font-family="serif" font-size="28" letter-spacing="5">${encodeURIComponent(label)}</text></svg>`;
     }, { once:true });
   });
 }
