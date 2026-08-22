@@ -1,0 +1,9 @@
+{
+  "name": "Serendipity — Digital Archive",
+  "short_name": "Serendipity",
+  "description": "A digital archive of things worth noticing.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f0e7",
+  "theme_color": "#172235"
+}

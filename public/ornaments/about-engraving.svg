@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 760" role="img" aria-label="Japanese landscape engraving ornament">
+  <rect width="520" height="760" fill="none"/>
+  <g fill="none" stroke="#172235" stroke-width="1.2" opacity=".72">
+    <path d="M18 650 C70 560 110 545 162 590 C220 640 252 520 306 470 C358 421 410 440 502 330"/>
+    <path d="M18 690 C98 615 132 612 188 650 C246 690 290 565 350 520 C407 478 450 492 508 420"/>
+    <path d="M18 716 C91 674 140 680 201 705 C260 729 305 637 368 598 C423 564 464 575 507 535"/>
+    <path d="M95 590 L95 365 M76 390 L95 350 L114 390 M69 412 L121 412 M78 438 L112 438"/>
+    <path d="M420 515 C421 446 422 375 423 300 M397 322 L423 274 L449 322 M392 346 L454 346 M401 374 L445 374"/>
+    <path d="M246 540 C250 500 270 474 300 455 C330 436 348 405 352 370"/>
+    <path d="M225 541 C240 515 251 498 268 486 M275 468 C294 449 315 430 326 403"/>
+    <path d="M34 220 C120 190 190 206 250 235 C317 267 381 250 485 184"/>
+    <path d="M46 245 C125 219 186 228 244 256 C312 289 382 274 474 213"/>
+    <path d="M65 270 C132 249 183 255 235 281 C300 314 366 304 455 246"/>
+  </g>
+  <g fill="#a83a2c" opacity=".78">
+    <circle cx="95" cy="365" r="3"/><circle cx="423" cy="300" r="3"/>
+  </g>
+  <g fill="#172235" opacity=".62" font-family="serif">
+    <text x="32" y="58" font-size="13" letter-spacing="4">SERENDIPITY</text>
+    <text x="32" y="84" font-size="9" letter-spacing="3">ARCHIVE / PLATE 01</text>
+    <text x="32" y="730" font-size="10" letter-spacing="2">KYOTO / LANDSCAPE STUDY</text>
+  </g>
+</svg>

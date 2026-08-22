@@ -1,0 +1,1 @@
+img{content-visibility:auto}img[loading="lazy"]{contain-intrinsic-size:800px 600px}.hero-art img,.featured-image img,.detail-image img,.story-image img,.journal-feature img{content-visibility:visible}html{scroll-behavior:smooth}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media(max-width:720px){body{overflow-x:hidden}}
