@@ -34,6 +34,9 @@ jobs:
           test -f src/polish.css
           test -f src/qa.css
           test -f src/performance.css
+          test -f src/production-ui.css
+          test -f src/runtime.js
+          test -f src/image-map.js
 
       - name: Check JavaScript syntax
         shell: bash
@@ -44,6 +47,11 @@ jobs:
           node --check src/collection.js
           node --check src/discovery.js
           node --check src/assets.js
+          node --check src/runtime.js
+          node --check src/image-map.js
+          node --check scripts/dev-server.mjs
+          node --check scripts/build.mjs
+          node --check scripts/prepare-pages.mjs
 
       - name: Check temporary assets are not accidentally hidden
         shell: bash
