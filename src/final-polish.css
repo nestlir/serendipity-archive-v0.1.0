@@ -1,0 +1,104 @@
+/* Final editorial polish: responsive balance, quiet graphics, fast images and calm interaction. */
+:root{--serendipity-red:#a83a2c;--serendipity-ochre:#b97832}
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
+.header{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.header .nav a,.header .search-trigger{transition:color .2s ease,border-color .2s ease,transform .2s ease}
+.header .nav a:hover,.header .search-trigger:hover{transform:translateY(-1px)}
+
+/* Real image frame: the moving image never escapes its editorial border. */
+.entry-image,.featured-image,.journal-image,.story-image,.detail-image,.hero-art{overflow:hidden;background:#d9d1c2}
+.entry-image{border:1px solid rgba(23,34,53,.14)}
+.entry-image-link{overflow:hidden}
+.entry-image:before,.featured-image:before,.journal-image:before,.story-image:before,.detail-image:before,.hero-art:before{content:"";position:absolute;inset:0;border:1px solid rgba(23,34,53,.16);pointer-events:none;z-index:3}
+.entry-image img,.featured-image img,.journal-image img,.story-image img,.detail-image img,.hero-art img{display:block;width:100%;height:100%;object-fit:cover}
+.entry-image img{transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.entry-image:hover img{transform:scale(1.025)}
+
+/* The archive frame is a frame, not an exposed moving pseudo-element. */
+body:before{z-index:90;inset:14px;pointer-events:none}
+body:after{z-index:91;inset:14px;pointer-events:none}
+.site-shell{overflow:clip}
+
+/* Today in the archive */
+.daily-home{position:relative;isolation:isolate}
+.daily-home:after{content:"今日";position:absolute;right:7vw;bottom:24px;font:clamp(70px,9vw,150px)/.7 serif;color:rgba(185,120,50,.08);writing-mode:vertical-rl;pointer-events:none;z-index:-1}
+.daily-home>div{position:relative;z-index:1}
+.daily-home .eyebrow{color:var(--serendipity-red)}
+.daily-home .text-link{margin-top:28px}
+
+/* About: make the engraving feel like a plate, not a sticker. */
+.about-engraving{filter:sepia(.08);mix-blend-mode:multiply;transform:rotate(-1.5deg);transition:transform .5s ease,opacity .5s ease}
+.about-engraving:hover{transform:rotate(0) translateY(-3px);opacity:.92}
+.about-engraving img{border:1px solid rgba(23,34,53,.13);padding:8px;background:rgba(244,240,231,.35)}
+.about-engraving figcaption{padding-left:9px}
+.about-page .about-label{position:relative;z-index:4}
+
+/* Discover: stronger asymmetry, but with a visible visual anchor on the right. */
+.discovery{min-height:920px}
+.discovery:after{content:"拾";position:absolute;right:5vw;bottom:80px;font:clamp(120px,17vw,250px)/.7 serif;color:rgba(185,120,50,.07);writing-mode:vertical-rl;pointer-events:none}
+.discovery-card-enhanced{position:relative;z-index:2}
+.discovery-ornament{z-index:2;background:rgba(244,240,231,.35)}
+.discovery-cta{position:relative;z-index:3;transition:background .25s ease,color .25s ease,border-color .25s ease,transform .25s ease}
+.discovery-cta:hover{background:var(--ink)!important;color:var(--paper)!important;border-color:var(--ink)!important;transform:translateX(3px)}
+.discovery-cta:hover span{color:#d99a55}
+
+/* Cards: tactile but not noisy. */
+.archive-item{transition:transform .35s ease,opacity .35s ease}
+.archive-item:hover{transform:translateY(-5px)}
+.save{transition:transform .2s ease,background .2s ease,color .2s ease}
+.save:hover{transform:scale(1.06);color:var(--serendipity-red)}
+.text-link,.toolbar-link,.back-link{transition:color .2s ease,border-color .2s ease,letter-spacing .2s ease}
+.text-link:hover,.toolbar-link:hover,.back-link:hover{color:var(--serendipity-red);letter-spacing:.17em}
+
+/* Gallery */
+.detail-gallery button{position:relative;transition:border-color .2s ease,transform .2s ease}
+.detail-gallery button:hover{transform:translateY(-2px)}
+.detail-gallery button.is-active:after{content:"";position:absolute;inset:4px;border:1px solid rgba(168,58,44,.6);pointer-events:none}
+.gallery-toolbar button{cursor:pointer}
+
+/* Image performance and layout stability. */
+img{content-visibility:auto}
+.hero-art img,.detail-image img,.story-image img{content-visibility:visible}
+.entry-image,.featured-image,.journal-image,.story-image,.detail-image{contain:layout paint}
+.archive-item{content-visibility:auto;contain-intrinsic-size:560px}
+
+/* Responsive: keep the editorial hierarchy instead of shrinking desktop layouts. */
+@media (max-width:1100px){
+  .header{padding-inline:24px}
+  .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .archive-item.item-2{margin-top:40px}
+  .discovery{min-height:850px}
+  .discovery-card-enhanced{margin-left:8%!important}
+  .discovery-ornament{right:4vw}
+  .about-engraving{width:min(190px,22vw)}
+}
+@media (max-width:760px){
+  html{scroll-behavior:auto}
+  body:before,body:after{inset:7px}
+  .site-shell{margin:7px}
+  .header{padding-inline:18px}
+  .header .nav{gap:14px}
+  .header .nav a,.header .search-trigger{font-size:8px;letter-spacing:.11em}
+  .archive-grid{grid-template-columns:1fr}
+  .archive-item.item-1,.archive-item.item-2{margin-top:0}
+  .entry-image{aspect-ratio:4/5}
+  .daily-home{grid-template-columns:1fr!important;gap:24px!important}
+  .daily-home:after{right:18px;bottom:18px}
+  .about-page{display:block!important}
+  .about-engraving{width:min(210px,70vw);margin:0 auto 35px}
+  .about-page>div:not(.about-engraving){margin-left:0}
+  .discovery{min-height:auto;padding-bottom:90px}
+  .discovery:after{right:18px;bottom:110px;font-size:120px}
+  .discovery-card-enhanced{margin-left:0!important;max-width:none}
+  .discovery-meta{margin-left:0!important;flex-wrap:wrap}
+  .discovery-ornament{position:relative;right:auto;top:auto;width:auto;min-height:0;margin:30px 0 15px;border-left:0;border-top:1px solid var(--ochre);padding:12px 0;display:flex;flex-direction:row;align-items:center;justify-content:space-between}
+  .discovery-ornament b{writing-mode:horizontal-tb}
+  .journal-feature,.featured{grid-template-columns:1fr!important}
+  .detail-grid{grid-template-columns:1fr!important}
+  .detail-gallery{grid-template-columns:repeat(3,1fr)}
+  .quick-nav{right:18px;bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
