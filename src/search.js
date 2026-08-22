@@ -48,7 +48,7 @@ function escapeHtml(value) { return String(value).replace(/[&<>\"']/g, (char) =>
 function typeLabel(type) { return ({ OBJECTS:'OBJECT', PLACES:'PLACE', CRAFT:'CRAFT', ART:'ART', PEOPLE:'PERSON', IDEAS:'IDEA' }[type] || type); }
 
 function enhanceSearchPage() {
-  if (!location.pathname.replace(/\/+$/, '') === '/search') return;
+  if (location.pathname.replace(/\/+$/, '') !== '/search') return;
   const form = document.querySelector('.search-big');
   const input = form?.querySelector('input[name="q"]');
   const pageHead = document.querySelector('.search-head');
