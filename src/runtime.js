@@ -1,6 +1,9 @@
+import { imageMap, gallerySets } from './image-map.js';
+
 const BASE = location.pathname.startsWith('/serendipity-archive-v0.1.0') ? '/serendipity-archive-v0.1.0' : '';
 window.__SERENDIPITY_BASE__ = BASE;
 const prefix = (value) => (!BASE || !value || value.startsWith(BASE) || !value.startsWith('/') ? value : BASE + value);
+const visual = (html) => html.replace(/(<img\b[^>]*\bsrc=")[^"]*("[^>]*\balt=")([^"]+)("[^>]*>)/gi, (match, before, mid, alt, after) => imageMap[alt] ? `${before}${imageMap[alt]}${mid}${alt}${after}` : match);
 const rewrite = (root = document) => {
   if (!BASE) return;
   root.querySelectorAll?.('[href^="/"],[src^="/"],[action^="/"]').forEach((el) => ['href','src','action'].forEach((attr) => {
@@ -8,11 +11,12 @@ const rewrite = (root = document) => {
   }));
 };
 const originalInnerHTML = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML');
-if (BASE && originalInnerHTML?.set) {
+if (originalInnerHTML?.set) {
   Object.defineProperty(Element.prototype, 'innerHTML', {
     configurable: true, get: originalInnerHTML.get,
     set(value) {
-      const html = String(value).replaceAll('href="/', `href="${BASE}/`).replaceAll('src="/', `src="${BASE}/`).replaceAll('action="/', `action="${BASE}/`);
+      let html = visual(String(value));
+      if (BASE) html = html.replaceAll('href="/', `href="${BASE}/`).replaceAll('src="/', `src="${BASE}/`).replaceAll('action="/', `action="${BASE}/`);
       originalInnerHTML.set.call(this, html);
     }
   });
@@ -24,8 +28,27 @@ document.addEventListener('click', (event) => {
   event.preventDefault(); location.href = prefix(href);
 });
 document.addEventListener('DOMContentLoaded', () => {
-  rewrite(); const observer = new MutationObserver(() => rewrite()); observer.observe(document.body, {childList:true, subtree:true});
+  rewrite(); enhanceGalleries();
+  const observer = new MutationObserver(() => { rewrite(); enhanceGalleries(); }); observer.observe(document.body, {childList:true, subtree:true});
 });
+
+function enhanceGalleries(){
+  document.querySelectorAll('.detail-image').forEach((wrap) => {
+    if (wrap.dataset.galleryReady) return;
+    const img = wrap.querySelector('img'); if (!img) return;
+    const title = img.alt; const set = gallerySets[title]; if (!set?.length) return;
+    wrap.dataset.galleryReady = 'true';
+    const gallery = document.createElement('div'); gallery.className = 'detail-gallery';
+    set.forEach((src, i) => {
+      const button = document.createElement('button'); button.type='button'; button.className=i===0?'is-active':''; button.setAttribute('aria-label',`View image ${i+1}`);
+      const thumb = document.createElement('img'); thumb.src=src; thumb.alt=`${title} — view ${i+1}`; button.append(thumb);
+      button.addEventListener('click',()=>{img.src=src; gallery.querySelectorAll('button').forEach(b=>b.classList.remove('is-active')); button.classList.add('is-active');});
+      gallery.append(button);
+    });
+    wrap.parentElement?.insertBefore(gallery, wrap.nextSibling);
+  });
+}
+
 const bootQuickNav = () => {
   if (document.querySelector('.quick-nav')) return;
   const nav = document.createElement('aside'); nav.className = 'quick-nav';
