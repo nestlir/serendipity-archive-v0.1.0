@@ -25,9 +25,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Build source artifact
-        run: node scripts/build.mjs
+      - name: Build and validate source
+        run: npm run build
 
       - name: Normalize GitHub Pages project paths
         run: node scripts/prepare-pages.mjs
@@ -45,6 +46,8 @@ jobs:
           test -f _site/sitemap.xml
           test -f _site/site.webmanifest
           test -f _site/favicon.svg
+          test -f _site/src/runtime.js
+          test -f _site/src/image-map.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
