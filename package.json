@@ -2,11 +2,13 @@
   "name": "serendipity-archive",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "python -m http.server 4173",
-    "build": "python3 -c \"print('Static build: no compilation required')\""
+    "dev": "node scripts/dev-server.mjs",
+    "check": "node --check src/app.js && node --check src/search.js && node --check src/collection.js && node --check src/discovery.js && node --check src/assets.js",
+    "build": "npm run check && rm -rf _site && mkdir -p _site && cp index.html 404.html _site/ && cp -R src _site/ && cp -R public/. _site/"
   },
-  "devDependencies": {
-    "vite": "^8.2.2"
+  "engines": {
+    "node": ">=18"
   }
 }
