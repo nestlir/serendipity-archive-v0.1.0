@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
-    "check": "node --check src/app.js && node --check src/search.js && node --check src/collection.js && node --check src/discovery.js && node --check src/assets.js",
-    "build": "npm run check && rm -rf _site && mkdir -p _site && cp index.html 404.html _site/ && cp -R src _site/ && cp -R public/. _site/"
+    "check": "node --check src/app.js && node --check src/search.js && node --check src/collection.js && node --check src/discovery.js && node --check src/assets.js && node --check scripts/dev-server.mjs && node --check scripts/build.mjs && node --check scripts/prepare-pages.mjs",
+    "build": "npm run check && node scripts/build.mjs"
   },
   "engines": {
     "node": ">=18"
