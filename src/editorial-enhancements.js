@@ -42,7 +42,7 @@ function aboutEngraving() {
   if (!about || about.querySelector('.about-engraving')) return;
   const node = document.createElement('figure');
   node.className = 'about-engraving';
-  node.innerHTML = `<img src="/ornaments/about-engraving.svg" alt=""><figcaption>PLATE 01 / AFTERNOON STUDY</figcaption>`;
+  node.innerHTML = `<img src="${BASE}/ornaments/about-engraving.svg" alt=""><figcaption>PLATE 01 / AFTERNOON STUDY</figcaption>`;
   about.prepend(node);
 }
 
