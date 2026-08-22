@@ -2,6 +2,11 @@ import { imageMap, gallerySets } from './image-map.js';
 
 const BASE = location.pathname.startsWith('/serendipity-archive-v0.1.0') ? '/serendipity-archive-v0.1.0' : '';
 window.__SERENDIPITY_BASE__ = BASE;
+const normalizedPath = () => location.pathname.replace(BASE, '').replace(/\/+$/, '') || '/';
+const categoryRoutes = new Set(['objects','places','craft','art','people','ideas']);
+if (categoryRoutes.has(normalizedPath().slice(1))) {
+  location.replace(prefix(`/archive/?category=${normalizedPath().slice(1)}`));
+}
 const prefix = (value) => (!BASE || !value || value.startsWith(BASE) || !value.startsWith('/') ? value : BASE + value);
 const visual = (html) => html.replace(/(<img\b[^>]*\bsrc=")[^"]*("[^>]*\balt=")([^"]+)("[^>]*>)/gi, (match, before, mid, alt, after) => imageMap[alt] ? `${before}${imageMap[alt]}${mid}${alt}${after}` : match);
 const rewrite = (root = document) => {
@@ -36,7 +41,8 @@ function enhanceGalleries(){
   document.querySelectorAll('.detail-image').forEach((wrap) => {
     if (wrap.dataset.galleryReady) return;
     const img = wrap.querySelector('img'); if (!img) return;
-    const title = img.alt; const set = gallerySets[title]; if (!set?.length) return;
+    const title = img.alt; const all = Object.values(imageMap); const set = gallerySets[title] || [imageMap[title], ...all.filter((src) => src !== imageMap[title])].filter(Boolean).slice(0,3);
+    if (set.length < 2) return;
     wrap.dataset.galleryReady = 'true';
     const gallery = document.createElement('div'); gallery.className = 'detail-gallery';
     set.forEach((src, i) => {
